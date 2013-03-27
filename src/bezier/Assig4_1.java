@@ -7,11 +7,12 @@ import java.util.ArrayList;
 
 import javax.imageio.*;
 
-// Template for assignment 4
 public class Assig4_1 {
+
 	public static final int IMAGESIZE = 1024;
 
 	public static ArrayList<DPoint> ctrlPoints = new ArrayList<>();
+
 	public static double t;
 
 	public static void main(String[] args) {
@@ -24,7 +25,8 @@ public class Assig4_1 {
 
 			ArrayList<DPoint> allPoints = ctrlPoints;
 
-			boolean quadratic = ctrlPoints.size() == 3;
+			// Use cubic 
+			boolean quadratic = (ctrlPoints.size() > 2);
 
 			// Limits the number of passing over the curve to 300
 			for (int i = 0; i < 300; i++) {
