@@ -9,9 +9,10 @@ public class DiffMatrix {
 	private static final String thinUp = "tifl";
 	private static final String thinDown = "yj";
 	private static final String roundDown = "pqg";
-	
+
 	private static final String acceptedChars = "abcdefghijklmnopqrstuvwxyz0123456789.,-";
-	private static final String[] groups = {round,straight,oblique,roundUp,thinUp,thinDown,roundDown};
+	private static final String[] groups = { round, straight, oblique, roundUp,
+			thinUp, thinDown, roundDown };
 
 	public static int getDistance(char c1, char c2) {
 
@@ -21,22 +22,26 @@ public class DiffMatrix {
 			System.err.println("Illegal Character Exception");
 			return Integer.MAX_VALUE;
 		}
-		
+
 		int first = getVirtualMapIndex(c1);
 		int second = getVirtualMapIndex(c2);
-		
-		return delta(first,second);
+
+		return delta(first, second);
 	}
-	
+
 	private static int getVirtualMapIndex(char c) {
-		
+
 		int id = getGroup(c);
-		
+
+		if (id < 0) {
+			return -1;
+		}
+
 		int pos = groups[id].indexOf(c);
-		
-		return id*1000+pos;
+
+		return id * 1000 + pos;
 	}
-	
+
 	private static int getGroup(char c) {
 
 		for (int i = 0; i < groups.length; i++) {
@@ -47,9 +52,9 @@ public class DiffMatrix {
 		}
 		return -1;
 	}
-	
+
 	private static int delta(int first, int second) {
-		
+
 		return Math.abs(first - second);
 	}
 }
