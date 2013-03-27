@@ -4,113 +4,86 @@ import java.util.ArrayList;
 
 public class BezierHelper {
 
-	public static ArrayList<DPoint> getPoints(double t,
-			ArrayList<DPoint> initialControlPoints) {
-		
-		// Gets the support points from the initial points
-		ArrayList<DPoint> temp = new ArrayList<>();
-		temp.addAll(initialControlPoints);
-		// Limits to 300 points
-		for (int i = 0; i <= 60; i++) {
-			System.out.println("Adding points @" + i);
-			
-			DPoint p = getPointFromt(t, temp);
-			
-			int j = 0;
-			while (temp.get(j).getX() < p.getX()) {j++;}
-			temp.add(j+1, p);
-		}
-		return temp;
-	}
-	
-	public static ArrayList<DPoint> getPoints(
-			ArrayList<DPoint> initialControlPoints) {
-		
-		// Gets t from the control points.
-		double step = 0;
-		for (int i = 0; i < initialControlPoints.size() - 1; i++) {
-			step += getDistance(initialControlPoints.get(i),
-					initialControlPoints.get(i + 1));
-		}
-		step = 1 / step;
-		System.out.println("step: " + step);
-		// Gets the support points from the initial points
-		ArrayList<DPoint> temp = new ArrayList<>();
-
-		for (double t = 0; t <= 1; t = t + step) {
-			System.out.println("Adding points with t=" + t);
-			temp.add(getPointFromt(t, initialControlPoints));
-		}
-		return temp;
-	}
+	public static final int IMAGESIZE = Assig4_1.IMAGESIZE;
+	public static final int ERROR_MAX = IMAGESIZE/2;
+	private static int doesNotMatter = 0;
 
 	/**
-	 * Computes the distance between the two given points.
+	 * Parses the points, and replaces every middle points by its associated
+	 * middle points.
 	 * 
-	 * @param p1
-	 * @param p2
-	 * @return
+	 * @param t
+	 * @param ctrlPoints
+	 * @return newCtrlPoints
 	 */
-	private static double getDistance(DPoint p1, DPoint p2) {
-		return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2)
-				+ Math.pow(p1.getY() - p2.getY(), 2));
+	public static ArrayList<DPoint> interleavePoints(double t,
+			ArrayList<DPoint> ctrlPoints) {
+
+		if (doesNotMatter > ERROR_MAX) {
+			return ctrlPoints;
+		}
+		
+		int size = ctrlPoints.size();
+
+		// Parses the points one by one starting from the end.
+		for (int i = size - 2; i > 0; i -= 2) {
+
+			DPoint p0 = ctrlPoints.get(i - 1);
+			DPoint p1 = ctrlPoints.remove(i);
+			DPoint p2 = ctrlPoints.get(i);
+
+			// Checks that it is worth adding points
+			if (distanceMatters(p0, p2)) {
+				ctrlPoints.addAll(i, getNewPointsQuadratic(t, p0, p1, p2));
+			} else {
+				doesNotMatter++;
+				ctrlPoints.add(i, p1);
+			}
+		}
+		return ctrlPoints;
 	}
 
 	/**
-	 * Gets the point with coordinates calculated from the t parameter, and the
-	 * initial control points given.
+	 * Gets the new control points from the three points given.
 	 * 
 	 * @param t
 	 * @param ctrlPoints
 	 * @return
 	 */
-	public static DPoint getPointFromt(double t, ArrayList<DPoint> ctrlPoints) {
+	public static ArrayList<DPoint> getNewPointsQuadratic(double t, DPoint p0,
+			DPoint p1, DPoint p2) {
 
-		int totalPoints = ctrlPoints.size() - 1;
-		double dx = 0, dy = 0;
+		// Uses Bernstain polynomial to find interleaving points.
+		DPoint p11 = new DPoint((1 - t) * p0.x + t * p1.x, (1 - t) * p0.y + t
+				* p1.y);
+		DPoint p21 = new DPoint((1 - t) * p1.x + t * p2.x, (1 - t) * p1.y + t
+				* p2.y);
+		DPoint p22 = new DPoint((1 - t) * p11.x + t * p21.x, (1 - t) * p11.y
+				+ t * p21.y);
 
-		for (int i = 0; i <= totalPoints; i++) {
+		ArrayList<DPoint> newCtrlPoints = new ArrayList<DPoint>();
 
-			double b = Bernstain(i, totalPoints, t);
+		// Adds the points in order
+		newCtrlPoints.add(p11);
+		newCtrlPoints.add(p22);
+		newCtrlPoints.add(p21);
 
-			dx += ctrlPoints.get(i).getX() * b;
-			dy += ctrlPoints.get(i).getY() * b;
-		}
-		return new DPoint(dx, dy);
+		return newCtrlPoints;
 	}
 
 	/**
-	 * Computes the Bernstain polynomial of degree n.
+	 * Checks if the points between p0 and p1 will actually make a difference on
+	 * the picture.
 	 * 
-	 * @param i
-	 * @param n
-	 * @param t
+	 * @param p0
+	 * @param p1
 	 * @return
 	 */
-	public static double Bernstain(int i, int n, double t) {
-		if (n < i) {
-			System.err.println("This Bernstain polynomial does not exist.");
-			return -1;
-		}
-		return factorial(n) / (factorial(i) * factorial(n - i))
-				* Math.pow(t, i) * Math.pow(1 - t, n - i);
-	}
+	private static boolean distanceMatters(DPoint p0, DPoint p1) {
 
-	/**
-	 * Computes the factorial up to the given level. Note that no efforts have
-	 * been made to try optimize the functions yet.
-	 * 
-	 * @param level
-	 * @return
-	 */
-	private static long factorial(int level) {
-		
-		//System.out.println("fact(" + level + ")");
-		
-		if (level == 0 || level == 1) {
-			return 1;
-		} else {
-			return level * factorial(level - 1);
-		}
+		boolean xSaturate = Math.abs(p0.x * IMAGESIZE - p1.x * IMAGESIZE) < 1;
+		boolean ySaturate = Math.abs(p0.y * IMAGESIZE - p1.y * IMAGESIZE) < 1;
+
+		return !(xSaturate && ySaturate);
 	}
 }

@@ -24,8 +24,13 @@ public class Assig4_1 {
 			BufferedImage img = new BufferedImage(IMAGESIZE, IMAGESIZE,
 					BufferedImage.TYPE_BYTE_GRAY);
 
-			ArrayList<DPoint> allPoints = BezierHelper.getPoints(t,ctrlPoints);
+			ArrayList<DPoint> allPoints = ctrlPoints;
 			
+			// Limits the number of passing over the curve to 300
+			for (int i = 0; i < 300; i++) {
+				BezierHelper.interleavePoints(t, allPoints);
+			}
+
 			System.out.println(allPoints);
 			drawPointsOnImage(allPoints, img.createGraphics());
 
@@ -38,13 +43,13 @@ public class Assig4_1 {
 
 	public static void drawPointsOnImage(ArrayList<DPoint> points, Graphics2D g) {
 
-		int x1 = (int) (IMAGESIZE * points.get(0).getX());
-		int y1 = (int) (IMAGESIZE * points.get(0).getY());
+		int x1 = (int) (IMAGESIZE * points.get(0).x);
+		int y1 = (int) (IMAGESIZE * points.get(0).y);
 
 		for (DPoint p : points) {
 
-			int x2 = (int) (IMAGESIZE * p.getX());
-			int y2 = (int) (IMAGESIZE * p.getY());
+			int x2 = (int) (IMAGESIZE * p.x);
+			int y2 = (int) (IMAGESIZE * p.y);
 
 			g.drawLine(x1, y1, x2, y2);
 
@@ -62,6 +67,9 @@ public class Assig4_1 {
 		ctrlPoints.add(new DPoint(0.0, 0.5));
 
 		for (int i = 1; i < args.length; i++) {
+			if (i > 2) {
+				break;
+			}
 			ctrlPoints.add(DPoint.parsePoint(args[i]));
 		}
 
