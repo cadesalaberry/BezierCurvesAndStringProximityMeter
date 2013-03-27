@@ -2,17 +2,21 @@ package string;
 
 public class DiffMatrix {
 
-	private static final String round = "saeoc";
-	private static final String straight = "rumn";
+	private static final String round = "saeoc", straight = "rumn";
 	private static final String oblique = "kwzxv";
 	private static final String roundUp = "dbh";
-	private static final String thinUp = "tifl";
+	private static final String thinUp = "i1tfl";
 	private static final String thinDown = "yj";
 	private static final String roundDown = "pqg";
+	private static final String bigRound = "098365";
+	private static final String bigOblique = "247";
+	private static final String punctuation = ".,-";
+	
+	
 
 	private static final String acceptedChars = "abcdefghijklmnopqrstuvwxyz0123456789.,-";
-	private static final String[] groups = { round, straight, oblique, roundUp,
-			thinUp, thinDown, roundDown };
+	private static final String[] groups = {bigOblique, bigRound, round, straight, oblique, roundUp,
+			thinUp, thinDown, roundDown, punctuation };
 
 	public static int getDistance(char c1, char c2) {
 
