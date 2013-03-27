@@ -26,20 +26,21 @@ public class Assig4_1 {
 			ArrayList<DPoint> allPoints = ctrlPoints;
 
 			// Use quadratic if there is more than one control point
-			boolean quadratic = (ctrlPoints.size() > 0);
+			boolean quadratic = (ctrlPoints.size() == 3);
 
 			// Limits the number of passing over the curve to 300
-			for (int i = 0; i < 50; i++) {
+			for (int i = 0; i < 300; i++) {
 
-				BufferedImage img2 = new BufferedImage(IMAGESIZE, IMAGESIZE,
-						BufferedImage.TYPE_BYTE_GRAY);
 				if (quadratic) {
 					BezierHelper.interleavePointsQuadratic(t, allPoints);
 				} else {
 					BezierHelper.interleavePointsCubic(t, allPoints);
 				}
-				drawPointsOnImage(allPoints, img2.createGraphics());
-				ImageIO.write(img2, "png", new File("./img/" + t + "-" + i));
+
+				// BufferedImage img2 = new BufferedImage(IMAGESIZE, IMAGESIZE,
+				// BufferedImage.TYPE_BYTE_GRAY);
+				// drawPointsOnImage(allPoints, img2.createGraphics());
+				// ImageIO.write(img2, "png", new File("./img/" + t + "-" + i));
 			}
 
 			drawPointsOnImage(allPoints, img.createGraphics());

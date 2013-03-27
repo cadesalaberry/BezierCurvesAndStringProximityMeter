@@ -46,6 +46,15 @@ seems to increase exponentially te closest you get to the extremas (0-1).
 
 (c) **5** Now, specify two control points, (0.25, 1.0) and (0.75, 0.0) (ie cubic), and vary *t*. Plot the maximum recursive depth you need to descend (in any branch) to ensure a complete curve without visual gaps. What do you observe?
 
+> Raw data:
+
+	t	recursion level needed
+	0.1	~25
+	0.2	~9	
+	0.25	~6
+	0.5	~4
+
+>Again, my images did not comport any gaps for I was drawing lines and not dots. I see that using cubic is more efficient, as the curve looks better after fewer recursion than the quadratic version.
 
 ## String Proximity Meter
 
