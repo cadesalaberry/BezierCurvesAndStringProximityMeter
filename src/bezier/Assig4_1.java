@@ -25,7 +25,7 @@ public class Assig4_1 {
 
 			ArrayList<DPoint> allPoints = ctrlPoints;
 
-			// Use cubic 
+			// Use quadratic if there is more than one control point
 			boolean quadratic = (ctrlPoints.size() > 2);
 
 			// Limits the number of passing over the curve to 300
