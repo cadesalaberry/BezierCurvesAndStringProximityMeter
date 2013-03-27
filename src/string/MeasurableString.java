@@ -81,7 +81,11 @@ public class MeasurableString {
 
 	private int distanceLetter(char c1, char c2) {
 
-		return 0;
+		if (c1 == c2) {
+			
+			return 0;			
+		}
+		
+		return DiffMatrix.getDistance(c1, c2);
 	}
-
 }
