@@ -5,24 +5,25 @@ import java.util.ArrayList;
 public class BezierHelper {
 
 	public static final int IMAGESIZE = Assig4_1.IMAGESIZE;
-	public static final int ERROR_MAX = IMAGESIZE/2;
+	public static final int ERROR_MAX = IMAGESIZE / 2;
 	private static int doesNotMatter = 0;
 
 	/**
 	 * Parses the points, and replaces every middle points by its associated
-	 * middle points.
+	 * control points.
 	 * 
 	 * @param t
 	 * @param ctrlPoints
 	 * @return newCtrlPoints
 	 */
-	public static ArrayList<DPoint> interleavePoints(double t,
+	public static ArrayList<DPoint> interleavePointsQuadratic(double t,
 			ArrayList<DPoint> ctrlPoints) {
 
+		// Stops interleaving points after a 50% failure
 		if (doesNotMatter > ERROR_MAX) {
 			return ctrlPoints;
 		}
-		
+
 		int size = ctrlPoints.size();
 
 		// Parses the points one by one starting from the end.
@@ -44,7 +45,7 @@ public class BezierHelper {
 	}
 
 	/**
-	 * Gets the new control points from the three points given.
+	 * Gets the new control points from the three given.
 	 * 
 	 * @param t
 	 * @param ctrlPoints

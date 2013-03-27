@@ -25,10 +25,10 @@ public class Assig4_1 {
 					BufferedImage.TYPE_BYTE_GRAY);
 
 			ArrayList<DPoint> allPoints = ctrlPoints;
-			
+
 			// Limits the number of passing over the curve to 300
 			for (int i = 0; i < 300; i++) {
-				BezierHelper.interleavePoints(t, allPoints);
+				BezierHelper.interleavePointsQuadratic(t, allPoints);
 			}
 
 			System.out.println(allPoints);
