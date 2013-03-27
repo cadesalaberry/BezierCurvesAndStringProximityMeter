@@ -27,7 +27,7 @@ point has an *x*-coordinate larger than the first).
 
 Ensure your code works and produces appropriate curves for different control points. What difference does choice of *t* make in the output image?
 
-	
+> It looks like t manages what "percentage" of the curve you want to render better. either the beginning or the end.
 
 (b) **5** Specify a single control point at (0.5, 1.0) (ie quadratic), and vary *t*. Plot the maximum recursive depth you need to descend (in any branch) to ensure a complete curve without visual gaps. What do you observe?
 
