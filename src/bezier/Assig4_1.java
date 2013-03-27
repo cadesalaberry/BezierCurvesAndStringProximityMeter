@@ -19,21 +19,24 @@ public class Assig4_1 {
 
 			readArguments(args);
 
-			// create an image for output. We don't need colour, so greyscale or
-			// even binary is ok.
 			BufferedImage img = new BufferedImage(IMAGESIZE, IMAGESIZE,
 					BufferedImage.TYPE_BYTE_GRAY);
 
 			ArrayList<DPoint> allPoints = ctrlPoints;
 
+			boolean quadratic = ctrlPoints.size() == 3;
+
 			// Limits the number of passing over the curve to 300
 			for (int i = 0; i < 300; i++) {
-				BezierHelper.interleavePointsQuadratic(t, allPoints);
+
+				if (quadratic) {
+					BezierHelper.interleavePointsQuadratic(t, allPoints);
+				} else {
+					BezierHelper.interleavePointsCubic(t, allPoints);
+				}
 			}
 
-			System.out.println(allPoints);
 			drawPointsOnImage(allPoints, img.createGraphics());
-
 			saveImage(img);
 
 		} catch (Exception e) {
